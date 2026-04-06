@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Mail, Lock, User, UserPlus, GraduationCap, Calendar, FileDigit, Zap, Wind } from 'lucide-react';
+import API_BASE from '../api';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -34,7 +35,7 @@ const Register = () => {
         age: formData.Age
       };
       
-      const response = await axios.post('http://localhost:5000/api/auth/register', payload);
+      const response = await axios.post(`${API_BASE}/auth/register`, payload);
       if (response.status === 201) {
         navigate('/login');
       }

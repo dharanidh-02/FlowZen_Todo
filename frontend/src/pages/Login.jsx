@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Mail, Lock, LogIn, Cpu, Calendar, BarChart3, ChevronLeft, ChevronRight, Zap, Target, Sparkles, Leaf, Wind } from 'lucide-react';
+import API_BASE from '../api';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -16,7 +17,7 @@ const Login = () => {
     setError('');
     setLoading(true);
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', {
+      const response = await axios.post(`${API_BASE}/auth/login`, {
         email,
         password,
       }, { withCredentials: true });

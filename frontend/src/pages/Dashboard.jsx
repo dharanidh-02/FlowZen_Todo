@@ -11,6 +11,7 @@ import TaskModal from '../components/TaskModal';
 import CalendarView from '../components/CalendarView';
 import KanbanBoard from '../components/KanbanBoard';
 import FocusMode from '../components/FocusMode';
+import API_BASE from '../api';
 
 const Dashboard = () => {
   const [user, setUser] = useState(null);
@@ -35,7 +36,7 @@ const Dashboard = () => {
 
   const fetchUser = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/user/getuser', { withCredentials: true });
+      const response = await axios.get(`${API_BASE}/user/getuser`, { withCredentials: true });
       const userData = response.data.user || response.data;
       setUser(userData);
       setNotes(userData.notes || '');
@@ -57,7 +58,7 @@ const Dashboard = () => {
 
   const fetchTodos = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/todos', { withCredentials: true });
+      const res = await axios.get(`${API_BASE}/todos`, { withCredentials: true });
       setTodos(res.data);
     } catch (err) {
       console.error('Failed to fetch todos', err);
@@ -66,7 +67,7 @@ const Dashboard = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.post('http://localhost:5000/api/auth/logout', {}, { withCredentials: true });
+      await axios.post(`${API_BASE}/auth/logout`, {}, { withCredentials: true });
       navigate('/login');
     } catch (err) {
       console.error('Logout failed', err);
@@ -77,7 +78,7 @@ const Dashboard = () => {
     e.preventDefault();
     setUpdateMsg({ type: '', text: '' });
     try {
-      const response = await axios.patch('http://localhost:5000/api/user/updateuser', profileData, { withCredentials: true });
+      const response = await axios.patch(`${API_BASE}/user/updateuser`, profileData, { withCredentials: true });
       if (response.status === 200) {
         setUpdateMsg({ type: 'success', text: 'Profile updated successfully!' });
         setUser({ ...user, ...profileData });
@@ -91,7 +92,7 @@ const Dashboard = () => {
   const saveNotes = async () => {
     setIsSavingNotes(true);
     try {
-      await axios.patch('http://localhost:5000/api/user/updateuser', { notes }, { withCredentials: true });
+      await axios.patch(`${API_BASE}/user/updateuser`, { notes }, { withCredentials: true });
     } catch (err) {
       console.error('Failed to save notes', err);
     } finally {
@@ -106,11 +107,11 @@ const Dashboard = () => {
     try {
       if (selectedTask && selectedTask._id) {
         // Update
-        const res = await axios.put(`http://localhost:5000/api/todos/${selectedTask._id}`, taskData, { withCredentials: true });
+        const res = await axios.put(`${API_BASE}/todos/${selectedTask._id}`, taskData, { withCredentials: true });
         setTodos(todos.map(t => t._id === selectedTask._id ? res.data : t));
       } else {
         // Create
-        const res = await axios.post('http://localhost:5000/api/todos', taskData, { withCredentials: true });
+        const res = await axios.post(`${API_BASE}/todos`, taskData, { withCredentials: true });
         setTodos([res.data, ...todos]);
       }
       setIsModalOpen(false);
@@ -124,7 +125,7 @@ const Dashboard = () => {
     e.preventDefault();
     if (!newTodo.trim()) return;
     try {
-      const res = await axios.post('http://localhost:5000/api/todos', { title: newTodo }, { withCredentials: true });
+      const res = await axios.post(`${API_BASE}/todos`, { title: newTodo }, { withCredentials: true });
       setTodos([res.data, ...todos]);
       setNewTodo('');
     } catch(err) { console.error('Add failed', err); }
@@ -132,7 +133,7 @@ const Dashboard = () => {
 
   const toggleTodo = async (id, currentStatus) => {
     try {
-      const res = await axios.put(`http://localhost:5000/api/todos/${id}`, { completed: !currentStatus }, { withCredentials: true });
+      const res = await axios.put(`${API_BASE}/todos/${id}`, { completed: !currentStatus }, { withCredentials: true });
       setTodos(todos.map(t => t._id === id ? res.data : t));
     } catch(err) { console.error('Toggle failed', err); }
   };
@@ -140,7 +141,7 @@ const Dashboard = () => {
   const handleDeleteTask = async (id) => {
     if (!window.confirm('Are you sure you want to delete this task?')) return;
     try {
-      await axios.delete(`http://localhost:5000/api/todos/${id}`, { withCredentials: true });
+      await axios.delete(`${API_BASE}/todos/${id}`, { withCredentials: true });
       setTodos(todos.filter(t => t._id !== id));
       setIsModalOpen(false);
       setSelectedTask(null);
