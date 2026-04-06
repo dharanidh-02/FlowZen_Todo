@@ -17,8 +17,8 @@ connectDB();
 // ─── Middleware ────────────────────────────────────────────────────────────────
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "http://localhost:3000",
-    credentials: true, // allow cookies to be sent cross-origin
+    origin: ["http://localhost:5173", "http://localhost:3000", process.env.CLIENT_URL].filter(Boolean),
+    credentials: true, 
   })
 );
 app.use(express.json());
