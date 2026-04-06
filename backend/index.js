@@ -38,8 +38,11 @@ app.use("/api/todos", todoRoutes); // /api/todos CRUD
 
 // ─── Health check ─────────────────────────────────────────────────────────────
 app.get("/", (req, res) => {
-  res.json({ message: "Todo List API is running 🚀" });
+  res.json({ message: "FlowZen API is running 🚀" });
 });
+
+app.get("/favicon.ico", (req, res) => res.status(204).end());
+app.get("/favicon.png", (req, res) => res.status(204).end());
 
 app.get("/status", (req, res) => {
   res.status(200).json({
