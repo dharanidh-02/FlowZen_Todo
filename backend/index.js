@@ -17,7 +17,7 @@ connectDB();
 // ─── Middleware ────────────────────────────────────────────────────────────────
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://localhost:3000", process.env.CLIENT_URL].filter(Boolean),
+    origin: ["http://localhost:5173", "http://localhost:3000", "https://flow-zen-frontend.vercel.app", process.env.CLIENT_URL].filter(Boolean),
     credentials: true, 
   })
 );
